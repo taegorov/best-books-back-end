@@ -2,18 +2,17 @@
 const mongoose = require('mongoose');
 
 
+const bookSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  description: {type: String, required: true },
+  status: {type: String, required: true }
+
+})
 
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true },
-  books: { books: Array, required: true }
+  books: [bookSchema]
 });
-
-const booksSchema = new.mongoose.Schema({
-  name: { type: String, required: true },
-  description: {type: String, required: true },
-  status: {type: String, requied: true }
-
-})
 
 
 
