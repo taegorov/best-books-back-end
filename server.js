@@ -6,7 +6,7 @@ const app = express();
 const cors = require('cors');
 app.use(cors());
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3002;
 
 app.get('/', proofOfLife);
 
@@ -21,12 +21,14 @@ mongoose.connect('mongodb://localhost:27017/user', { useNewUrlParser: true, useU
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-  console.log('Mongoose is connected')
+  console.log('Mongoose is connected');
 });
 
 const BookShelf = require('./models/users');
 
-
+const tim = new BookShelf({ email: 'tim@tim.com', books:[{name: 'The Giving Tree', description: 'Book about a shitty kid', status: 'read'} ]});
+console.log({tim});
+tim.save();
 
 // keep on bottom
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
