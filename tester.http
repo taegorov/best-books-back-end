@@ -13,6 +13,6 @@ content-type: application/json
   "bookName": "Dune"
 }
 
-
 ###
 
+DELETE http://localhost:3001/0?email=tim@tim.com HTTP/1.1
