@@ -23,6 +23,8 @@ db.once('open', function () {
 
 const Users = require('./models/Users.js');
 
+
+// ==== define new users ==== //
 // const tim = new Users({
 //   email: 'tim@tim.com', books: [
 //     { name: 'The Giving Tree', description: 'Book about a shitty kid', status: 'top 5 worst' },
@@ -32,6 +34,7 @@ const Users = require('./models/Users.js');
 // });
 // console.log({ tim });
 // tim.save();
+
 
 // ===== routes ===== //
 app.get('/', proofOfLife);
@@ -88,7 +91,7 @@ async function deleteBooks(request, response) {
       currentUser.save();
       response.send("deleted!")
     } else {
-      response.send('no users with that name:(');
+      response.status(400).send('no users with that name:(');
     }
   });
 
@@ -96,5 +99,5 @@ async function deleteBooks(request, response) {
 
 
 
-// keep on bottom
+// ==== keep on bottom ==== // 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
