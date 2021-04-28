@@ -5,6 +5,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 app.use(cors());
+app.use(express.json());
 
 const PORT = process.env.PORT || 3002;
 
@@ -20,22 +21,22 @@ db.once('open', function () {
 });
 
 
-const BookShelf = require('./models/Users.js');
+const Users = require('./models/Users.js');
 
-const tim = new BookShelf({
-  email: 'tim@tim.com', books: [
-    { name: 'The Giving Tree', description: 'Book about a shitty kid', status: 'top 5 worst' },
-    { name: 'Hyperion', description: 'Book about some people', status: 'top 5 best' },
-    { name: 'Lord of the Rings', description: 'They should have used the eagles for travel', status: 'top 5 plot hole' }
-  ]
-});
-console.log({ tim });
-tim.save();
+// const tim = new Users({
+//   email: 'tim@tim.com', books: [
+//     { name: 'The Giving Tree', description: 'Book about a shitty kid', status: 'top 5 worst' },
+//     { name: 'Hyperion', description: 'Book about some people', status: 'top 5 best' },
+//     { name: 'Lord of the Rings', description: 'They should have used the eagles for travel', status: 'top 5 plot hole' }
+//   ]
+// });
+// console.log({ tim });
+// tim.save();
 
 // ===== routes ===== //
 app.get('/', proofOfLife);
-app.get('/books', getAllBooks)
-
+app.get('/books', getAllBooks);
+app.post('/books', postBooks);
 
 
 function proofOfLife(req, res) {
@@ -43,15 +44,38 @@ function proofOfLife(req, res) {
   res.send('hello world');
 }
 
-function getAllBooks(request, response) {
+async function getAllBooks(request, response) {
   const name = request.query.email;
-  console.log({ name });
-  BookShelf.find({ email: name }, (err, books) => {
+
+  console.log( { name });
+
+  await Users.find({ email: name }, (err, users) => {
     if (err) return console.error(err);
-    console.log('line 51', books);
-    response.send(books.length ? books[0].books : 'No books :(');
-  })
+    console.log('line 51', users);
+    response.send(users.length ? users[0].email : 'No books :(');
+  });
 }
+
+async function postBooks(request, response) {
+  const { bookName } = request.body;
+  const name = request.query.email;
+
+    await Users.find({ email: name }, (err, users) => {
+      if (Users.length) {
+      const currentUser = users[3];
+      const currentBooks = currentUser.books;
+      const newBook = { name: bookName }; 
+      currentBooks.push(newBook);
+      currentUser.save();
+      response.send(currentUser.books)
+      } else {
+        response.send('no users with that name:(');
+      }
+    });
+
+}
+
+
 
 // keep on bottom
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
