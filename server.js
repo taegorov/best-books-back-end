@@ -37,8 +37,10 @@ const Users = require('./models/Users.js');
 app.get('/', proofOfLife);
 app.get('/books', getAllBooks);
 app.post('/books', postBooks);
+app.delete('/books/:index', deleteBooks);
 
 
+// ==== functions ==== //
 function proofOfLife(req, res) {
   console.log('we did it');
   res.send('hello world');
@@ -47,12 +49,12 @@ function proofOfLife(req, res) {
 async function getAllBooks(request, response) {
   const name = request.query.email;
 
-  console.log( { name });
+  console.log({ name });
 
   await Users.find({ email: name }, (err, users) => {
     if (err) return console.error(err);
-    console.log('line 51', users);
-    response.send(users.length ? users[0].email : 'No books :(');
+    console.log('users', users);
+    response.send(users.length ? users[0].books : 'No books :(');
   });
 }
 
@@ -60,18 +62,35 @@ async function postBooks(request, response) {
   const { bookName } = request.body;
   const name = request.query.email;
 
-    await Users.find({ email: name }, (err, users) => {
-      if (Users.length) {
-      const currentUser = users[3];
+  await Users.find({ email: name }, (err, users) => {
+    if (Users.length) {
+      const currentUser = users[0];
       const currentBooks = currentUser.books;
-      const newBook = { name: bookName }; 
+      const newBook = { name: bookName };
       currentBooks.push(newBook);
       currentUser.save();
       response.send(currentUser.books)
-      } else {
-        response.send('no users with that name:(');
-      }
-    });
+    } else {
+      response.send('no users with that name:(');
+    }
+  });
+}
+
+async function deleteBooks(request, response) {
+  const index = request.params.index;
+  const name = request.query.email;
+
+  await Users.find({ email: name }, (err, users) => {
+    if (Users.length) {
+      const currentUser = users[0];
+      const currentBooks = currentUser.books;
+      currentBooks.splice(index, 1);
+      currentUser.save();
+      response.send("deleted!")
+    } else {
+      response.send('no users with that name:(');
+    }
+  });
 
 }
 
