@@ -26,7 +26,7 @@ const Users = require('./models/Users.js');
 
 // ==== define new users ==== //
 // const tim = new Users({
-//   email: 'tim@tim.com', books: [
+//   email: 'tjvicc84@gmail.com', books: [
 //     { name: 'The Giving Tree', description: 'Book about a shitty kid', status: 'top 5 worst' },
 //     { name: 'Hyperion', description: 'Book about some people', status: 'top 5 best' },
 //     { name: 'Lord of the Rings', description: 'They should have used the eagles for travel', status: 'top 5 plot hole' }
