@@ -22,6 +22,7 @@ db.once('open', function () {
 
 
 const Users = require('./models/Users.js');
+// const Books = require('./models/Users.js')
 
 
 // ==== define new users ==== //
@@ -34,6 +35,17 @@ const Users = require('./models/Users.js');
 // });
 // console.log({ tim });
 // tim.save();
+
+// const timE = new Users({
+//   email: 'taegorov@gmail.com', books: [
+//     { name: 'Way of Kings', description: 'Dorky 1400 page book', status: 'top 5' },
+//     { name: 'Hyperion', description: 'Book about some people', status: 'top 5 also' },
+//     { name: 'Leviathan Wakes', description: 'Sci Fi nonsense', status: 'top 5 as well' }
+//   ]
+// });
+// console.log({ timE });
+// timE.save();
+
 
 
 // ===== routes ===== //
@@ -68,10 +80,10 @@ async function postBooks(request, response) {
   await Users.find({ email }, (err, users) => {
     if (Users.length) {
       const currentUser = users[0];
-      console.log(currentUser);
-      console.log(name, description, status);
+      // console.log(currentUser);
+      // console.log(name, description, status);
       const currentBooks = currentUser.books;
-      const newBook = { name, description, status  };
+      const newBook = { name, description, status };
       currentBooks.push(newBook);
       currentUser.save();
       response.send(currentUser.books)
@@ -83,21 +95,30 @@ async function postBooks(request, response) {
 
 async function deleteBooks(request, response) {
   const index = request.params.index;
+
   const name = request.query.email;
+  console.log(index, "hooray!")
 
+  // await Users.find({ _id: index }, (err, users) => {
+  //   if (Users.length) {
+  //     // const currentUser = users[0];
+  //     // const currentBooks = currentUser.books;
+  //     // currentBooks.splice(index, 1);
+  //     // currentUser.save();
+  //     console.log("SUCCESS", users)
+  //     response.send(users);
   await Users.find({ email: name }, (err, users) => {
-    if (Users.length) {
-      const currentUser = users[0];
-      const currentBooks = currentUser.books;
-      currentBooks.splice(index, 1);
-      currentUser.save();
-      response.send("deleted!")
-    } else {
-      response.status(400).send('no users with that name:(');
-    }
-  });
 
+    console.log('users', users[0].books[0]);
+    // Users.delete({ _id: index })
+    response.send(index);
+  });
+  // } if (err) {
+  //   response.status(400).send('no users with that name:(');
 }
+//   });
+
+// }
 
 
 
