@@ -62,14 +62,16 @@ async function getAllBooks(request, response) {
 }
 
 async function postBooks(request, response) {
-  const { bookName } = request.body;
-  const name = request.query.email;
+  const { name, description, status } = request.body;
+  const email = request.query.email;
 
-  await Users.find({ email: name }, (err, users) => {
+  await Users.find({ email }, (err, users) => {
     if (Users.length) {
       const currentUser = users[0];
+      console.log(currentUser);
+      console.log(name, description, status);
       const currentBooks = currentUser.books;
-      const newBook = { name: bookName };
+      const newBook = { name, description, status  };
       currentBooks.push(newBook);
       currentUser.save();
       response.send(currentUser.books)
